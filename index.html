@@ -703,20 +703,17 @@ function handleBuyerSignup(){
     text.innerHTML='Please enter a <strong>valid email address.</strong>';
     notif.classList.add('show');setTimeout(()=>notif.classList.remove('show'),3000);return;
   }
-  // ↓ Replace with your Supabase project URL and anon key before publishing
+  // Clear field and show popup IMMEDIATELY — don't wait for Supabase
+  document.getElementById('buyerEmail').value='';
+  showThankYou();
+  // Save to Supabase in background (silent)
   const SUPABASE_URL='https://wrqazccevjgrhhxfmjoi.supabase.co';
   const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndycWF6Y2NldmpncmhoeGZtam9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3NTgzOTQsImV4cCI6MjA4OTMzNDM5NH0.Z6Ag1hFv0j9Nc5XikAdERHLdECsHDDJhdgt2xqYy6j4';
   fetch(SUPABASE_URL+'/rest/v1/waitlist',{
     method:'POST',
     headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'},
     body:JSON.stringify({email:email,type:'buyer',source:'sariko.store',created_at:new Date().toISOString()})
-  }).then(()=>{
-    document.getElementById('buyerEmail').value='';
-    showThankYou();
-  }).catch(()=>{
-    document.getElementById('buyerEmail').value='';
-    showThankYou();
-  });
+  }).catch(()=>{});
 }
 
 // Animated stat counters
